@@ -15,12 +15,6 @@ pipeline {
 			}
 		}
 
-		stage('Deploy') {
-			steps {
-				sh 'GIT_URL=${gitUrl} GIT_BRANCH=${BRANCH_NAME} GIT_COMMIT=${gitCommit} /usr/local/bin/kairos-deploy-helm.sh'
-			}
-		}
-
 		stage('Approval') {
 			when {
 				branch 'master'
@@ -32,7 +26,7 @@ pipeline {
 			}
 		}
 
-		stage('Deploy to Prod') {
+		stage('Deploy') {
 			when {
 				branch 'master'
 			}
