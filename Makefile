@@ -1,5 +1,5 @@
-REGISTRY?=directxman12
-IMAGE?=k8s-prometheus-adapter
+REGISTRY?=quay.io/kairosinc
+IMAGE?=custom-metrics-prometheus-adapter
 TEMP_DIR:=$(shell mktemp -d)
 ARCH?=amd64
 ALL_ARCH=amd64 arm arm64 ppc64le s390x
@@ -37,7 +37,7 @@ $(OUT_DIR)/%/adapter: vendor $(src_deps)
 	
 docker-build: vendor
 	cp deploy/Dockerfile $(TEMP_DIR)
-	cd $(TEMP_DIR) && sed -i "s|BASEIMAGE|$(BASEIMAGE)|g" Dockerfile
+	cd $(TEMP_DIR)
 
 	docker run -it -v $(TEMP_DIR):/build -v $(shell pwd):/go/src/github.com/directxman12/k8s-prometheus-adapter -e GOARCH=$(ARCH) $(GOIMAGE) /bin/bash -c "\
 		CGO_ENABLED=0 go build -tags netgo -o /build/adapter github.com/directxman12/k8s-prometheus-adapter/cmd/adapter"
