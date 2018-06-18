@@ -1,47 +1,29 @@
-REGISTRY?=directxman12
-IMAGE?=k8s-prometheus-adapter
+REGISTRY?=quay.io/kairosinc
+IMAGE?=custom-metrics-prometheus-adapter
 TEMP_DIR:=$(shell mktemp -d)
 ARCH?=amd64
 ALL_ARCH=amd64 arm arm64 ppc64le s390x
 ML_PLATFORMS=linux/amd64,linux/arm,linux/arm64,linux/ppc64le,linux/s390x
 OUT_DIR?=./_output
-VENDOR_DOCKERIZED=0
-
+VENDOR_DOCKERIZED=1
 VERSION?=latest
 GOIMAGE=golang:1.8
-
-ifeq ($(ARCH),amd64)
-	BASEIMAGE?=busybox
-endif
-ifeq ($(ARCH),arm)
-	BASEIMAGE?=armhf/busybox
-endif
-ifeq ($(ARCH),arm64)
-	BASEIMAGE?=aarch64/busybox
-endif
-ifeq ($(ARCH),ppc64le)
-	BASEIMAGE?=ppc64le/busybox
-endif
-ifeq ($(ARCH),s390x)
-	BASEIMAGE?=s390x/busybox
-	GOIMAGE=s390x/golang:1.8
-endif
 
 .PHONY: all build docker-build push-% push test verify-gofmt gofmt verify
 
 all: build
+
 build: vendor
-	CGO_ENABLED=0 GOARCH=$(ARCH) go build -a -tags netgo -o $(OUT_DIR)/$(ARCH)/adapter github.com/directxman12/k8s-prometheus-adapter/cmd/adapter
+	CGO_ENABLED=0 GOARCH=$(ARCH) go build -a -tags netgo -o $(OUT_DIR)/$(ARCH)/adapter github.com/kairosinc/custom-metrics-prometheus-adapter/cmd/adapter
 
 docker-build: vendor
-	cp deploy/Dockerfile $(TEMP_DIR)
-	cd $(TEMP_DIR) && sed -i "s|BASEIMAGE|$(BASEIMAGE)|g" Dockerfile
-
-	docker run -it -v $(TEMP_DIR):/build -v $(shell pwd):/go/src/github.com/directxman12/k8s-prometheus-adapter -e GOARCH=$(ARCH) $(GOIMAGE) /bin/bash -c "\
-		CGO_ENABLED=0 go build -a -tags netgo -o /build/adapter github.com/directxman12/k8s-prometheus-adapter/cmd/adapter"
-
-	docker build -t $(REGISTRY)/$(IMAGE)-$(ARCH):$(VERSION) $(TEMP_DIR)
-	rm -rf $(TEMP_DIR)
+	docker run -it \
+		-v $(shell pwd)/bin/:/build \
+		-v $(shell pwd):/go/src/github.com/kairosinc/custom-metrics-prometheus-adapter \
+		-e GOARCH=$(ARCH) $(GOIMAGE) \
+		/bin/bash \
+		-c "CGO_ENABLED=0 go build -a -tags netgo -o /build/adapter github.com/kairosinc/custom-metrics-prometheus-adapter/cmd/adapter"
+	docker build -t $(REGISTRY)/$(IMAGE):$(VERSION)
 
 push-%:
 	$(MAKE) ARCH=$* docker-build
