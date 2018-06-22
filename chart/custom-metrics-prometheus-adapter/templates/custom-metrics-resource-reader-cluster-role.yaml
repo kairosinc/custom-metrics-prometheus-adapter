@@ -1,0 +1,11 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ .Values.resourceReader.clusterRoleBinding.name }}
+rules:
+- apiGroups:
+  - ""
+  resources:
+{{ toYaml .Values.resourceReader.clusterRole.resources | indent 2 -}}
+  verbs:
+{{ toYaml .Values.resourceReader.clusterRole.verbs | indent 2 }}

@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: {{ .Values.apiserver.name }}
+  name: {{ .Values.apiserver.name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.apiserver.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.apiserver.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.apiserver.name }}
+      name: {{ .Values.apiserver.name }}
+    spec:
+      serviceAccountName: {{ .Values.apiserver.serviceAccount }}
+      containers:
+      - name: {{ .Values.apiserver.name }}
+        image: {{ .Values.apiserver.image }}:{{ .Values.apiserver.tag }}
+{{- if .Values.apiserver.args }}
+        args:
+{{ toYaml .Values.apiserver.args | indent 8 -}}
+{{- end -}}
+        ports:
+        - containerPort: {{ .Values.apiserver.containerPort }}
+        volumeMounts:
+        - mountPath: {{ .Values.apiserver.volumes.path }}
+          name: {{ .Values.apiserver.volumes.name }}
+          readOnly: {{ .Values.apiserver.volumes.readOnly }}
+      volumes:
+      - name: {{ .Values.apiserver.volumes.name }}
+        secret:
+          secretName: {{ .Values.apiserver.volumes.secretName }}

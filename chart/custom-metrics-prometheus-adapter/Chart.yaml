@@ -1,0 +1,13 @@
+name: Kubernetes Custom Metrics Adapter for Prometheus
+version: 0.0.1
+appVersion: 0.0.1
+description: An implementation of Kubernetes custom metrics API, suitable for use with the autoscaling/v2 Horizontal Pod Autoscaler in Kubernetes 1.6+.
+home: https://github.com/kairosinc/custom-metrics-prometheus-adapter
+icon: https://www.cncf.io/wp-content/uploads/2017/08/logo_prometheus_padding-300x277.png
+sources:
+  - https://github.com/kairosinc/custom-metrics-prometheus-adapter
+maintainers:
+  - name: Lucas do Amaral Saboya
+    email: lucas@kairos.com
+  - name: Srini
+    email: sreddybr3@gmail.com
