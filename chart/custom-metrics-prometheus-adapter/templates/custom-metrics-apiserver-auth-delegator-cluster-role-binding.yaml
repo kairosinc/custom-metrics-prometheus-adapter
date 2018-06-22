@@ -1,0 +1,12 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ .Values.delegator.clusterRoleBinding.name }}
+roleRef:
+  apiGroup: {{ .Values.delegator.clusterRoleBinding.roleRef.apiGroup }}
+  kind: {{ .Values.delegator.clusterRoleBinding.roleRef.kind }}
+  name: {{ .Values.delegator.clusterRoleBinding.roleRef.name }}
+subjects:
+- kind: {{ .Values.delegator.clusterRoleBinding.subject.kind }}
+  name: {{ .Values.delegator.clusterRoleBinding.subject.name }}
+  namespace: {{ .Values.namespace }}

@@ -1,0 +1,13 @@
+apiVersion: apiregistration.k8s.io/v1beta1
+kind: APIService
+metadata:
+  name: {{ .Values.apiservice.version }}.{{ .Values.apiservice.group }}
+spec:
+  service:
+    name: {{ .Values.apiserver.name }}
+    namespace: {{ .Values.namespace }}
+  group: {{ .Values.apiservice.group }}
+  version: {{ .Values.apiservice.version }}
+  insecureSkipTLSVerify: {{ .Values.apiservice.insecureSkipTLSVerify }}
+  groupPriorityMinimum: {{ .Values.apiservice.groupPriorityMinimum }}
+  versionPriority: {{ .Values.apiservice.versionPriority }}
