@@ -5,11 +5,11 @@ ARCH?=amd64
 ALL_ARCH=amd64 arm arm64 ppc64le s390x
 ML_PLATFORMS=linux/amd64,linux/arm,linux/arm64,linux/ppc64le,linux/s390x
 OUT_DIR?=./_output
-VENDOR_DOCKERIZED=0
-
+VENDOR_DOCKERIZED=1
 VERSION?=latest
 GOIMAGE=golang:1.10
 
+<<<<<<< HEAD
 ifeq ($(ARCH),amd64)
 	BASEIMAGE?=busybox
 endif
@@ -30,20 +30,27 @@ endif
 .PHONY: all docker-build push-% push test verify-gofmt gofmt verify build-local-image
 
 all: $(OUT_DIR)/$(ARCH)/adapter
+=======
+.PHONY: all build docker-build push-% push test verify-gofmt gofmt verify
+
+all: build
+
+build: vendor
+	CGO_ENABLED=0 GOARCH=$(ARCH) go build -a -tags netgo -o $(OUT_DIR)/$(ARCH)/adapter github.com/kairosinc/custom-metrics-prometheus-adapter/cmd/adapter
+>>>>>>> 0d5f1946aaaa75936fa0f86c57eae5be6c096a55
 
 src_deps=$(shell find pkg cmd -type f -name "*.go")
 $(OUT_DIR)/%/adapter: vendor $(src_deps)
 	CGO_ENABLED=0 GOARCH=$* go build -tags netgo -o $(OUT_DIR)/$(ARCH)/adapter github.com/directxman12/k8s-prometheus-adapter/cmd/adapter
 	
 docker-build: vendor
-	cp deploy/Dockerfile $(TEMP_DIR)
-	cd $(TEMP_DIR)
-
-	docker run -it -v $(TEMP_DIR):/build -v $(shell pwd):/go/src/github.com/directxman12/k8s-prometheus-adapter -e GOARCH=$(ARCH) $(GOIMAGE) /bin/bash -c "\
-		CGO_ENABLED=0 go build -tags netgo -o /build/adapter github.com/directxman12/k8s-prometheus-adapter/cmd/adapter"
-
-	docker build -t $(REGISTRY)/$(IMAGE)-$(ARCH):$(VERSION) $(TEMP_DIR)
-	rm -rf $(TEMP_DIR)
+	docker run -it \
+		-v $(shell pwd)/bin/:/build \
+		-v $(shell pwd):/go/src/github.com/kairosinc/custom-metrics-prometheus-adapter \
+		-e GOARCH=$(ARCH) $(GOIMAGE) \
+		/bin/bash \
+		-c "CGO_ENABLED=0 go build -a -tags netgo -o /build/adapter github.com/kairosinc/custom-metrics-prometheus-adapter/cmd/adapter"
+	docker build -t $(REGISTRY)/$(IMAGE):$(VERSION)
 
 build-local-image: $(OUT_DIR)/$(ARCH)/adapter
 	cp deploy/Dockerfile $(TEMP_DIR)
