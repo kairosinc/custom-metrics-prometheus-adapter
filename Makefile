@@ -29,15 +29,10 @@ endif
 
 .PHONY: all docker-build push-% push test verify-gofmt gofmt verify build-local-image
 
-all: $(OUT_DIR)/$(ARCH)/adapter
-=======
-.PHONY: all build docker-build push-% push test verify-gofmt gofmt verify
-
 all: build
 
 build: vendor
 	CGO_ENABLED=0 GOARCH=$(ARCH) go build -a -tags netgo -o $(OUT_DIR)/$(ARCH)/adapter github.com/kairosinc/custom-metrics-prometheus-adapter/cmd/adapter
->>>>>>> 0d5f1946aaaa75936fa0f86c57eae5be6c096a55
 
 src_deps=$(shell find pkg cmd -type f -name "*.go")
 $(OUT_DIR)/%/adapter: vendor $(src_deps)
