@@ -44,7 +44,7 @@ docker-build: vendor
 		-e GOARCH=$(ARCH) $(GOIMAGE) \
 		/bin/bash \
 		-c "CGO_ENABLED=0 go build -a -tags netgo -o /build/adapter github.com/kairosinc/custom-metrics-prometheus-adapter/cmd/adapter"
-	docker build -t $(REGISTRY)/$(IMAGE):$(VERSION) $(TEMP_DIR)
+	docker build -t $(REGISTRY)/$(IMAGE):$(VERSION) .
 
 build-local-image: $(OUT_DIR)/$(ARCH)/adapter
 	cp deploy/Dockerfile $(TEMP_DIR)
