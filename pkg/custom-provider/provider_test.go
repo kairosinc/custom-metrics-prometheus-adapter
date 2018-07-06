@@ -29,8 +29,8 @@ import (
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	fakedyn "k8s.io/client-go/dynamic/fake"
 
-	config "github.com/directxman12/k8s-prometheus-adapter/cmd/config-gen/utils"
-	prom "github.com/directxman12/k8s-prometheus-adapter/pkg/client"
+	config "github.com/kairosinc/custom-metrics-prometheus-adapter/cmd/config-gen/utils"
+	prom "github.com/kairosinc/custom-metrics-prometheus-adapter/pkg/client"
 	pmodel "github.com/prometheus/common/model"
 )
 

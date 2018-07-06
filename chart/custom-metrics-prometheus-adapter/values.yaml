@@ -28,7 +28,7 @@ reader:
 apiserver:
   name: custom-metrics-apiserver
   replicas: 1
-  image: directxman12/k8s-prometheus-adapter
+  image: kairosinc/custom-metrics-prometheus-adapter
   tag: latest
   servicePort: 443
   containerPort: 6443

@@ -29,10 +29,10 @@ import (
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 
-	prom "github.com/directxman12/k8s-prometheus-adapter/pkg/client"
-	mprom "github.com/directxman12/k8s-prometheus-adapter/pkg/client/metrics"
-	adaptercfg "github.com/directxman12/k8s-prometheus-adapter/pkg/config"
-	cmprov "github.com/directxman12/k8s-prometheus-adapter/pkg/custom-provider"
+	prom "github.com/kairosinc/custom-metrics-prometheus-adapter/pkg/client"
+	mprom "github.com/kairosinc/custom-metrics-prometheus-adapter/pkg/client/metrics"
+	adaptercfg "github.com/kairosinc/custom-metrics-prometheus-adapter/pkg/config"
+	cmprov "github.com/kairosinc/custom-metrics-prometheus-adapter/pkg/custom-provider"
 	"github.com/kubernetes-incubator/custom-metrics-apiserver/pkg/cmd/server"
 	"github.com/kubernetes-incubator/custom-metrics-apiserver/pkg/dynamicmapper"
 )

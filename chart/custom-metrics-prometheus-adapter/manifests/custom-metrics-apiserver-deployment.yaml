@@ -19,7 +19,7 @@ spec:
       serviceAccountName: custom-metrics-apiserver
       containers:
       - name: custom-metrics-apiserver
-        image: directxman12/k8s-prometheus-adapter-amd64
+        image: kairosinc/custom-metrics-prometheus-adapter-amd64
         args:
         - /adapter
         - --secure-port=6443

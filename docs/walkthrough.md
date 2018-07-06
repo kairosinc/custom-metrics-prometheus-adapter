@@ -36,8 +36,8 @@ Prometheus and the custom metrics adapter.
 
 Prometheus can be found at `prom/prometheus` on Dockerhub.  The adapter
 has different images for each arch, and can be found at
-`directxman12/k8s-prometheus-adapter-${ARCH}`.  For instance, if you're on
-an x86_64 machine, use the `directxman12/k8s-prometheus-adapter-amd64`
+`kairosinc/custom-metrics-prometheus-adapter-${ARCH}`.  For instance, if you're on
+an x86_64 machine, use the `kairosinc/custom-metrics-prometheus-adapter-amd64`
 image.
 
 If you're feeling adventurous, you can build the latest version of the

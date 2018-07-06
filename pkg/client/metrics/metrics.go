@@ -22,7 +22,7 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus"
 
-	"github.com/directxman12/k8s-prometheus-adapter/pkg/client"
+	"github.com/kairosinc/custom-metrics-prometheus-adapter/pkg/client"
 )
 
 var (

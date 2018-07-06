@@ -13,8 +13,8 @@ import (
 	apimeta "k8s.io/apimachinery/pkg/api/meta"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	prom "github.com/directxman12/k8s-prometheus-adapter/pkg/client"
-	"github.com/directxman12/k8s-prometheus-adapter/pkg/config"
+	prom "github.com/kairosinc/custom-metrics-prometheus-adapter/pkg/client"
+	"github.com/kairosinc/custom-metrics-prometheus-adapter/pkg/config"
 	pmodel "github.com/prometheus/common/model"
 )
 
