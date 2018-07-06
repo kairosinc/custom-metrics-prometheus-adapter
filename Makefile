@@ -36,9 +36,9 @@ build: vendor
 src_deps=$(shell find pkg cmd -type f -name "*.go")
 $(OUT_DIR)/%/adapter: vendor $(src_deps)
 	CGO_ENABLED=0 GOARCH=$* go build -tags netgo -o $(OUT_DIR)/$(ARCH)/adapter github.com/kairosinc/custom-metrics-prometheus-adapter/cmd/adapter
-	
+
 docker-build: vendor
-	docker run -it \
+	docker run --rm \
 		-v $(shell pwd)/bin/:/build \
 		-v $(shell pwd):/go/src/github.com/kairosinc/custom-metrics-prometheus-adapter \
 		-e GOARCH=$(ARCH) $(GOIMAGE) \
