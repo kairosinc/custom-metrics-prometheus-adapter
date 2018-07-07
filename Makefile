@@ -66,7 +66,10 @@ push: ./manifest-tool $(addprefix push-,$(ALL_ARCH))
 
 vendor: Gopkg.lock
 ifeq ($(VENDOR_DOCKERIZED),1)
-	docker run -it -v $(shell pwd):/go/src/github.com/kairosinc/custom-metrics-prometheus-adapter -w /go/src/github.com/kairosinc/custom-metrics-prometheus-adapter golang:1.10 /bin/bash -c "\
+	docker run --rm \
+		-v $(shell pwd):/go/src/github.com/kairosinc/custom-metrics-prometheus-adapter \
+		-w /go/src/github.com/kairosinc/custom-metrics-prometheus-adapter \
+		golang:1.10 /bin/bash -c "\
 		curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh \
 		&& dep ensure -vendor-only"
 else
