@@ -1,4 +1,4 @@
-name: Kubernetes Custom Metrics Adapter for Prometheus
+name: custom-metrics-prometheus-adapter
 version: 0.0.1
 appVersion: 0.0.1
 description: An implementation of Kubernetes custom metrics API, suitable for use with the autoscaling/v2 Horizontal Pod Autoscaler in Kubernetes 1.6+.

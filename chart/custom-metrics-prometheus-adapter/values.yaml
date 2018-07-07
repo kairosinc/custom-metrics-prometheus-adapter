@@ -28,7 +28,7 @@ reader:
 apiserver:
   name: custom-metrics-apiserver
   replicas: 1
-  image: kairosinc/custom-metrics-prometheus-adapter
+  image: sreddybr3/custom-metrics-prometheus-adapter
   tag: latest
   servicePort: 443
   containerPort: 6443
@@ -37,8 +37,7 @@ apiserver:
     name: volume-serving-cert
     secretName: cm-adapter-serving-certs
     readOnly: true
-  serviceAccount:
-    name: custom-metrics-apiserver
+  serviceAccount: custom-metrics-apiserver
   service:
   clusterRole:
   args:
@@ -47,10 +46,10 @@ apiserver:
   - --tls-cert-file=/var/run/serving-cert/serving.crt
   - --tls-private-key-file=/var/run/serving-cert/serving.key
   - --logtostderr=true
-  - --prometheus-url=http://prometheus.prom.svc:9090/
-  - --metrics-relist-interval=30s
-  - --rate-interval=5m
+  - --prometheus-url=http://prometheus-server.monitoring.svc:80/
+  - --metrics-relist-interval=5m
   - --v=10
+  - --config=/etc/adapter/config.yaml
 
 apiservice:
   version: v1beta1
@@ -75,6 +74,7 @@ resourceReader:
     - namespaces
     - pods
     - services
+    - configmaps
     verbs:
     - get
     - list

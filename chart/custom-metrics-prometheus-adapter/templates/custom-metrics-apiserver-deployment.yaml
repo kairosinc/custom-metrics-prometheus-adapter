@@ -1,4 +1,4 @@
-apiVersion: apps/v1
+apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   labels:
@@ -30,7 +30,17 @@ spec:
         - mountPath: {{ .Values.apiserver.volumes.path }}
           name: {{ .Values.apiserver.volumes.name }}
           readOnly: {{ .Values.apiserver.volumes.readOnly }}
+        - mountPath: /etc/adapter/
+          name: config
+          readOnly: true
+        - mountPath: /tmp
+          name: tmp-vol
       volumes:
       - name: {{ .Values.apiserver.volumes.name }}
         secret:
           secretName: {{ .Values.apiserver.volumes.secretName }}
+      - name: config
+        configMap:
+          name: adapter-config
+      - name: tmp-vol
+        emptyDir: {}
