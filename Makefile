@@ -26,6 +26,20 @@ ifeq ($(ARCH),s390x)
 	GOIMAGE=s390x/golang:1.10
 endif
 
+export PATH := /usr/local/go/bin:$(PATH)
+
+ifeq ($(OS),Windows_NT)
+    detected_OS := Windows
+else
+    detected_OS := $(shell sh -c 'uname -s 2>/dev/null || echo not')
+endif
+
+ifeq ($(detected_OS),Darwin)
+	export GOPATH := $(GOPATH):$(shell pwd)
+else
+	export GOPATH := $(shell pwd)
+endif
+
 .PHONY: all docker-build push-% push test verify-gofmt gofmt verify build-local-image
 
 all: build
