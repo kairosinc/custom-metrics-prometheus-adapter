@@ -45,7 +45,7 @@ endif
 all: build
 
 build: vendor
-	echo $GOPATH $GOROOT && find $GOPATH && CGO_ENABLED=0 GOARCH=$(ARCH) go build -a -tags netgo -o $(OUT_DIR)/$(ARCH)/adapter github.com/kairosinc/custom-metrics-prometheus-adapter/cmd/adapter
+	echo $(GOPATH) $(GOROOT) && find $(GOPATH) && CGO_ENABLED=0 GOARCH=$(ARCH) go build -a -tags netgo -o $(OUT_DIR)/$(ARCH)/adapter github.com/kairosinc/custom-metrics-prometheus-adapter/cmd/adapter
 
 src_deps=$(shell find pkg cmd -type f -name "*.go")
 $(OUT_DIR)/%/adapter: vendor $(src_deps)
