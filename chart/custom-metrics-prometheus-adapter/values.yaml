@@ -1,81 +1,67 @@
-namespace: monitoring
+# Default values for k8s-prometheus-adapter..
+affinity: {}
 
-clusterRole:
-  name: custom-metrics-server-resources
-  rules:
-    apiGroups:
-    - custom.metrics.k8s.io
+image:
+  repository: kairosinc/custom-metrics-prometheus-adapter
+  tag: v0.2.1
+  pullPolicy: IfNotPresent
+
+logLevel: 6
+
+metricsRelistInterval: 30s
+
+nodeSelector: {}
+
+# Url to access prometheus
+prometheus:
+  url: http://prometheus-server.monitoring.svc
+  port: 80
+
+replicas: 1
+
+rbac:
+  # Specifies whether RBAC resources should be created
+  create: true
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name:
+
+resources:
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+rules:
+  default: false
+  custom:
+  - seriesQuery: '{__name__=~"kairosnet_grpc_sum",pod!="",kubernetes_namespace!=""}'
     resources:
-    verbs:
+      overrides:
+        kubernetes_namespace: {resource: "namespace"}
+        pod: {resource: "pod"}
+    name:
+      matches: ".*"
+      as: "kairosnet_grpc_requests"
+    metricsQuery: 'sum(irate(<<.Series>>{<<.LabelMatchers>>}[2m])) by (<<.GroupBy>>)'
+service:
+  annotations: {}
+  port: 443
+  type: ClusterIP
 
-delegator:
-  clusterRoleBinding:
-    name: custom-metrics:system:auth-delegator
-    roleRef:
-      apiGroup: rbac.authorization.k8s.io
-      kind: ClusterRole
-      name: system:auth-delegator
-    subject:
-      kind: ServiceAccount
-      name: custom-metrics-apiserver
+tls:
+  enable: false
+  ca: |-
+    # Public CA file that signed the APIService
+  key: |-
+    # Private key of the APIService
+  certificate: |-
+    # Public key of the APIService
 
-reader:
-  roleBinding:
-    name: custom-metrics-auth-reader
-    roleRef:
-      name: extension-apiserver-authentication-reader
-
-apiserver:
-  name: custom-metrics-apiserver
-  replicas: 1
-  image: sreddybr3/custom-metrics-prometheus-adapter
-  tag: latest
-  servicePort: 443
-  containerPort: 6443
-  volumes:
-    path: /var/run/serving-cert
-    name: volume-serving-cert
-    secretName: cm-adapter-serving-certs
-    readOnly: true
-  serviceAccount: custom-metrics-apiserver
-  service:
-  clusterRole:
-  args:
-  - /adapter
-  - --secure-port=6443
-  - --tls-cert-file=/var/run/serving-cert/serving.crt
-  - --tls-private-key-file=/var/run/serving-cert/serving.key
-  - --logtostderr=true
-  - --prometheus-url=http://prometheus-server.monitoring.svc:80/
-  - --metrics-relist-interval=5m
-  - --v=10
-  - --config=/etc/adapter/config.yaml
-
-apiservice:
-  version: v1beta1
-  group: custom.metrics.k8s.io
-  insecureSkipTLSVerify: true
-  groupPriorityMinimum: 100
-  versionPriority: 100
-
-hpa:
-  roleBinding:
-    name: controller-custom-metrics
-  roleRef:
-    name: custom-metrics-server-resources
-  subjects:
-    name: horizontal-pod-autoscaler
-
-resourceReader:
-  clusterRoleBinding:
-    name: custom-metrics-resource-reader
-  clusterRole:
-    resources:
-    - namespaces
-    - pods
-    - services
-    - configmaps
-    verbs:
-    - get
-    - list
-
+tolerations: []

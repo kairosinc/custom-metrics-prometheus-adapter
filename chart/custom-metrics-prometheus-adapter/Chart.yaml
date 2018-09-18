@@ -1,9 +1,12 @@
-name: custom-metrics-prometheus-adapter
-version: 0.0.1
-appVersion: 0.0.1
-description: An implementation of Kubernetes custom metrics API, suitable for use with the autoscaling/v2 Horizontal Pod Autoscaler in Kubernetes 1.6+.
+name: prometheus-adapter
+version: v0.1.1
+appVersion: v0.2.1
+description: A Helm chart for k8s prometheus adapter
 home: https://github.com/kairosinc/custom-metrics-prometheus-adapter
-icon: https://www.cncf.io/wp-content/uploads/2017/08/logo_prometheus_padding-300x277.png
+keywords:
+  - hpa
+  - prometheus
+  - adapter
 sources:
   - https://github.com/kairosinc/custom-metrics-prometheus-adapter
 maintainers:
