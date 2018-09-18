@@ -15,7 +15,7 @@ pipeline {
 				QUAY_PASSWORD = credentials('QUAY_PASSWORD')
 			}
 			steps {
-				sh 'QUAY_USERNAME=${QUAY_USERNAME} QUAY_PASSWORD=${QUAY_PASSWORD} GIT_BRANCH=${BRANCH_NAME} GIT_COMMIT=${gitCommit} make build'
+				sh 'QUAY_USERNAME=${QUAY_USERNAME} QUAY_PASSWORD=${QUAY_PASSWORD} GIT_BRANCH=${BRANCH_NAME} GIT_COMMIT=${gitCommit} make docker-build'
 			}
 		}
 
