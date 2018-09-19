@@ -1,13 +1,13 @@
-REGISTRY?=quay.io/kairosinc
-IMAGE?=custom-metrics-prometheus-adapter
-VERSION?=latest
-ARCH?=amd64
-ALL_ARCH=amd64 arm arm64 ppc64le s390x
+.PHONY: build-local build build-push deploy
 
-all: build
-
-build: vendor
+build-local: vendor
 	CGO_ENABLED=0 GOARCH=$(ARCH) go build -a -tags netgo -o build/adapter github.com/kairosinc/custom-metrics-prometheus-adapter/cmd/adapter
 
-docker-build: vendor
-	docker build -t $(REGISTRY)/$(IMAGE):$(VERSION) .
+build:
+	@scripts/build.sh
+
+build-push:
+	@scripts/build.sh push
+
+deploy:
+	@scripts/deploy.sh

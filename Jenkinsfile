@@ -1,7 +1,7 @@
 #!groovy
 
 pipeline {
-	agent { label 'jenkins-agent' }
+	agent any
 
 	environment {
 		def gitCommit = sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
@@ -15,7 +15,7 @@ pipeline {
 				QUAY_PASSWORD = credentials('QUAY_PASSWORD')
 			}
 			steps {
-				sh 'QUAY_USERNAME=${QUAY_USERNAME} QUAY_PASSWORD=${QUAY_PASSWORD} GIT_BRANCH=${BRANCH_NAME} GIT_COMMIT=${gitCommit} make docker-build'
+				sh 'QUAY_USERNAME=${QUAY_USERNAME} QUAY_PASSWORD=${QUAY_PASSWORD} GIT_BRANCH=${BRANCH_NAME} GIT_COMMIT=${gitCommit} make build-push'
 			}
 		}
 

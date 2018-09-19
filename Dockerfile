@@ -1,6 +1,6 @@
 FROM golang:1.10 as builder
 
-ENV APP=custom-metrics-prometheus-adapter
+ENV APP custom-metrics-prometheus-adapter
 ENV REPO github.com/kairosinc/$APP
 ENV COMM adapter
 
