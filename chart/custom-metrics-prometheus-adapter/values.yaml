@@ -3,8 +3,10 @@ affinity: {}
 
 image:
   repository: kairosinc/custom-metrics-prometheus-adapter
-  tag: v0.2.1
+  tag: latest
   pullPolicy: IfNotPresent
+
+imagePullSecrets: {}
 
 logLevel: 6
 
@@ -39,7 +41,7 @@ resources:
   #   memory: 128Mi
 
 rules:
-  default: false
+  default: true
   custom:
   - seriesQuery: '{__name__=~"kairosnet_grpc_sum",pod!="",kubernetes_namespace!=""}'
     resources:
