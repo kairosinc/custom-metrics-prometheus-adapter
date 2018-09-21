@@ -10,8 +10,18 @@ pipeline {
 
 	stages {
 		stage('Build') {
+			environment {
+				QUAY_USERNAME = credentials('QUAY_USERNAME')
+				QUAY_PASSWORD = credentials('QUAY_PASSWORD')
+			}
 			steps {
-				sh 'GIT_BRANCH=${BRANCH_NAME} GIT_COMMIT=${gitCommit} make build'
+				sh 'QUAY_USERNAME=${QUAY_USERNAME} QUAY_PASSWORD=${QUAY_PASSWORD} GIT_BRANCH=${BRANCH_NAME} GIT_COMMIT=${gitCommit} make build-push'
+			}
+		}
+
+		stage('Deploy') {
+			steps {
+				sh 'GIT_URL=${gitUrl} GIT_BRANCH=${BRANCH_NAME} GIT_COMMIT=${gitCommit} make deploy'
 			}
 		}
 
@@ -26,7 +36,7 @@ pipeline {
 			}
 		}
 
-		stage('Deploy') {
+		stage('Deploy to Prod') {
 			when {
 				branch 'master'
 			}
